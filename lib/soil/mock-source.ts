@@ -71,6 +71,9 @@ export const FIELDS: Field[] = [
   },
 ]
 
+/** A fixed anchor keeps mock data stable between server and client renders. */
+export const ANCHOR = new Date('2026-09-04T09:42:00+05:30').getTime()
+
 /** Baseline "now" values per field — chosen so each field tells a different story. */
 const BASELINE: Record<FieldId, Record<ParameterKey, number>> = {
   'field-a': { n: 148, p: 52, k: 186, moisture: 58, temperature: 24.5, ph: 6.8 },
@@ -102,19 +105,18 @@ const AMPLITUDE: Record<ParameterKey, number> = {
   ph: 0.12,
 }
 
-/** A fixed anchor keeps mock data stable between server and client renders. */
-const ANCHOR = new Date('2026-09-04T09:42:00+05:30').getTime()
-
-export function getSeries(fieldId: FieldId, range: TimeRange): SensorReading[] {
+export function getSeries(fieldId: FieldId, range: TimeRange, now: number = Date.now()): SensorReading[] {
   const { points, stepMinutes } = RANGE_CONFIG[range]
   const base = BASELINE[fieldId]
   const rand = seeded(fieldId.charCodeAt(6) * 97 + points)
   const out: SensorReading[] = []
   const totalMs = points * stepMinutes * 60_000
 
+  // Optional: align 'now' to a minute boundary so data stays stable between polls within the same minute
+  // We'll leave it as actual now so the last reading timestamp increments exactly.
   for (let i = 0; i < points; i++) {
     const t = i / (points - 1)
-    const ts = ANCHOR - totalMs + i * stepMinutes * 60_000
+    const ts = now - totalMs + i * stepMinutes * 60_000
     const hour = new Date(ts).getHours()
     // Diurnal curve for temperature; moisture dips through the day and recovers after irrigation
     const diurnal = Math.sin(((hour - 6) / 24) * Math.PI * 2)
@@ -123,23 +125,20 @@ export function getSeries(fieldId: FieldId, range: TimeRange): SensorReading[] {
     const reading: SensorReading = {
       timestamp: new Date(ts).toISOString(),
       fieldId,
-      n: base.n + drift * -AMPLITUDE.n * 0.6 + (rand() - 0.5) * AMPLITUDE.n,
-      p: base.p + drift * -AMPLITUDE.p * 0.4 + (rand() - 0.5) * AMPLITUDE.p,
-      k: base.k + drift * AMPLITUDE.k * 0.3 + (rand() - 0.5) * AMPLITUDE.k,
-      moisture: base.moisture - diurnal * AMPLITUDE.moisture * 0.8 + (rand() - 0.5) * AMPLITUDE.moisture,
-      temperature: base.temperature + diurnal * AMPLITUDE.temperature * 1.6 + (rand() - 0.5) * AMPLITUDE.temperature,
-      ph: base.ph + (rand() - 0.5) * AMPLITUDE.ph,
+      n: Math.round(base.n + drift * -AMPLITUDE.n * 0.6 + (rand() - 0.5) * AMPLITUDE.n),
+      p: Math.round(base.p + drift * -AMPLITUDE.p * 0.4 + (rand() - 0.5) * AMPLITUDE.p),
+      k: Math.round(base.k + drift * AMPLITUDE.k * 0.3 + (rand() - 0.5) * AMPLITUDE.k),
+      moisture: Math.round(base.moisture - diurnal * AMPLITUDE.moisture * 0.8 + (rand() - 0.5) * AMPLITUDE.moisture),
+      temperature: Math.round((base.temperature + diurnal * AMPLITUDE.temperature * 1.6 + (rand() - 0.5) * AMPLITUDE.temperature) * 10) / 10,
+      ph: Math.round((base.ph + (rand() - 0.5) * AMPLITUDE.ph) * 10) / 10,
     }
     out.push(reading)
   }
-  // Force the final point to the exact baseline so the "current" values match the cards
-  const last = out[out.length - 1]
-  Object.assign(last, base, { timestamp: new Date(ANCHOR).toISOString() })
   return out
 }
 
-export function getLatest(fieldId: FieldId): SensorReading {
-  const series = getSeries(fieldId, '1H')
+export function getLatest(fieldId: FieldId, now: number = Date.now()): SensorReading {
+  const series = getSeries(fieldId, '1H', now)
   return series[series.length - 1]
 }
 

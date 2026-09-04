@@ -1,5 +1,6 @@
 import type { Status } from '@/lib/soil/types'
 import { cn } from '@/lib/utils'
+import { AnimatedNumber } from '@/components/ui/animated-number'
 
 const STROKE: Record<Status, string> = {
   good: 'stroke-status-good',
@@ -29,7 +30,7 @@ export function HealthRing({ score, status, size = 148 }: { score: number; statu
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="font-display text-4xl font-bold tabular leading-none">{score}</span>
+        <AnimatedNumber value={score} className="font-display text-4xl font-bold tabular leading-none" />
         <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-canopy-foreground/60">Soil health</span>
       </div>
     </div>

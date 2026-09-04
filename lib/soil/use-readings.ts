@@ -10,25 +10,28 @@ export interface ReadingsPayload {
   device: DeviceStatus
 }
 
-const fetcher = async (url: string): Promise<ReadingsPayload> => {
-  const res = await fetch(url)
-  if (!res.ok) throw new Error('Failed to load readings')
-  return res.json()
-}
-
 /**
- * Fetches readings from /api/readings and keeps them fresh.
- * `fallbackData` is computed synchronously from the same mock source so the
- * first paint is never empty; once the API is DB-backed, drop the fallback.
+ * Returns live readings for a field, refreshing every 5 seconds.
+ *
+ * Currently backed by the mock source (client-side). When a real backend is
+ * available, swap the fetcher for an API call to POST /api/readings.
  */
 export function useReadings(fieldId: FieldId, range: TimeRange = '24H') {
-  return useSWR<ReadingsPayload>(`/api/readings?fieldId=${fieldId}&range=${range}`, fetcher, {
-    fallbackData: {
+  return useSWR<ReadingsPayload>(
+    `readings:${fieldId}:${range}`,
+    () => ({
       latest: getLatest(fieldId),
       series: getSeries(fieldId, range),
       device: getDeviceStatus(fieldId),
+    }),
+    {
+      fallbackData: {
+        latest: getLatest(fieldId),
+        series: getSeries(fieldId, range),
+        device: getDeviceStatus(fieldId),
+      },
+      refreshInterval: 5_000,
+      keepPreviousData: false,
     },
-    refreshInterval: 30_000,
-    keepPreviousData: true,
-  })
+  )
 }

@@ -1,3 +1,4 @@
+import * as React from "react"
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
@@ -43,8 +44,31 @@ function Button({
   className,
   variant = "default",
   size = "default",
+  asChild = false,
+  render,
   ...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants> & { asChild?: boolean }) {
+  // When render prop is provided directly or via asChild, the rendered element
+  // is typically not a native <button> (e.g. a Next.js <Link>), so we must
+  // tell Base UI not to enforce native button semantics.
+  const resolvedRender = asChild
+    ? (props.children as React.ReactElement)
+    : render
+
+  if (resolvedRender) {
+    // Remove children from rest when asChild consumes it as the render element
+    const { children: _children, ...rest } = props
+    return (
+      <ButtonPrimitive
+        data-slot="button"
+        className={cn(buttonVariants({ variant, size, className }))}
+        render={resolvedRender}
+        nativeButton={false}
+        {...(asChild ? rest : { ...rest, children: _children })}
+      />
+    )
+  }
+
   return (
     <ButtonPrimitive
       data-slot="button"

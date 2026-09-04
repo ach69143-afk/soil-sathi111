@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { StatusBadge } from './status-badge'
 import { LevelGauge } from './level-gauge'
 import { TrendIndicator } from './trend-indicator'
+import { AnimatedNumber } from '@/components/ui/animated-number'
 import { PARAMETERS, evaluate } from '@/lib/soil/thresholds'
 import type { ParameterKey, Range } from '@/lib/soil/types'
 import { cn } from '@/lib/utils'
@@ -64,7 +65,7 @@ export function NpkCard({ paramKey, value, optimal, trend, className }: NpkCardP
       <CardContent className="flex flex-col gap-5 px-5 pt-5 pb-0">
         <div className="flex items-end justify-between gap-3">
           <div className="flex items-baseline gap-1.5">
-            <span className="font-display text-[40px] font-bold tabular leading-none tracking-tight">{value.toFixed(meta.decimals)}</span>
+            <AnimatedNumber value={value} decimals={meta.decimals} className="font-display text-[40px] font-bold tabular leading-none tracking-tight" />
             <span className="text-sm font-medium text-muted-foreground">{meta.unit}</span>
           </div>
           <TrendIndicator delta={trend} decimals={0} deadband={1} />

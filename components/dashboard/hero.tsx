@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Cpu, MapPin, Radio, Sparkles } from 'lucide-react'
+import { format } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { useField } from '@/components/soil/field-provider'
 import { useReadings } from '@/lib/soil/use-readings'
@@ -48,6 +49,12 @@ export function DashboardHero() {
               <span className={cn('pulse-ring relative size-2 rounded-full', connected ? 'bg-status-good text-status-good' : 'bg-status-critical text-status-critical')} />
               ESP32 & NPK Sensor: {connected ? 'Connected' : 'Offline'}
             </span>
+            {connected && (
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-status-good/30 bg-status-good/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-status-good">
+                <span className="pulse-ring relative size-1.5 rounded-full bg-status-good text-status-good" />
+                Live
+              </span>
+            )}
             <span className="inline-flex items-center gap-1.5 rounded-full border border-canopy-foreground/15 px-3 py-1 text-xs text-canopy-foreground/80">
               <MapPin className="size-3.5" />
               {FARMER.village}, {FARMER.district}
@@ -72,7 +79,7 @@ export function DashboardHero() {
             </div>
             <div>
               <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-canopy-foreground/55">Last reading</dt>
-              <dd className="mt-1 font-display font-semibold">Just now</dd>
+              <dd className="mt-1 font-display font-semibold">{format(latest.timestamp, 'hh:mm:ss a')}</dd>
             </div>
             <div>
               <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-canopy-foreground/55">Overall soil</dt>

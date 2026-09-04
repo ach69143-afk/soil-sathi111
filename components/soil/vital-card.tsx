@@ -5,6 +5,7 @@ import { LevelGauge } from './level-gauge'
 import { PARAMETERS, evaluate } from '@/lib/soil/thresholds'
 import type { Range } from '@/lib/soil/types'
 import { cn } from '@/lib/utils'
+import { AnimatedNumber } from '@/components/ui/animated-number'
 
 type VitalKey = 'moisture' | 'temperature' | 'ph'
 
@@ -49,7 +50,7 @@ export function VitalCard({ paramKey, value, optimal, className }: { paramKey: V
           <StatusBadge status={status} />
         </div>
         <div className="flex items-baseline gap-1">
-          <span className="font-display text-3xl font-bold tabular leading-none tracking-tight">{value.toFixed(meta.decimals)}</span>
+          <AnimatedNumber value={value} decimals={meta.decimals} className="font-display text-3xl font-bold tabular leading-none tracking-tight" />
           <span className="text-sm font-medium text-muted-foreground">{meta.unit}</span>
         </div>
         <LevelGauge value={value} axis={meta.axis} optimal={optimal} status={status} decimals={meta.decimals} unit={meta.unit} />

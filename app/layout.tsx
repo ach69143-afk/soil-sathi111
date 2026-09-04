@@ -4,6 +4,7 @@ import { Inter, Manrope } from 'next/font/google'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { FieldProvider } from '@/components/soil/field-provider'
 import { AppShell } from '@/components/shell/app-shell'
+import { Toaster } from 'sonner'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
@@ -35,13 +36,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${manrope.variable} bg-background`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${manrope.variable} bg-background`}>
       <body className="antialiased">
         <TooltipProvider>
           <FieldProvider>
             <AppShell>{children}</AppShell>
           </FieldProvider>
         </TooltipProvider>
+        <Toaster position="top-center" richColors />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
