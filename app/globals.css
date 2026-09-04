@@ -1,0 +1,213 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-manrope), var(--font-inter), ui-sans-serif, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  /* Agritech semantic tokens */
+  --color-earth: var(--earth);
+  --color-earth-foreground: var(--earth-foreground);
+  --color-canopy: var(--canopy);
+  --color-canopy-foreground: var(--canopy-foreground);
+  --color-status-good: var(--status-good);
+  --color-status-warn: var(--status-warn);
+  --color-status-critical: var(--status-critical);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  color-scheme: light;
+  /* Soft neutral surface with a faint warm cast */
+  --background: oklch(0.975 0.006 100);
+  --foreground: oklch(0.22 0.025 150);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.025 150);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.025 150);
+  /* Deep natural green */
+  --primary: oklch(0.42 0.095 152);
+  --primary-foreground: oklch(0.985 0.01 120);
+  --secondary: oklch(0.955 0.012 130);
+  --secondary-foreground: oklch(0.32 0.05 150);
+  --muted: oklch(0.955 0.008 110);
+  --muted-foreground: oklch(0.50 0.02 140);
+  --accent: oklch(0.94 0.02 140);
+  --accent-foreground: oklch(0.32 0.06 150);
+  --destructive: oklch(0.58 0.19 28);
+  --border: oklch(0.91 0.01 120);
+  --input: oklch(0.90 0.01 120);
+  --ring: oklch(0.55 0.10 152);
+
+  /* Earth tone accent (loam / ochre) */
+  --earth: oklch(0.66 0.10 62);
+  --earth-foreground: oklch(0.99 0 0);
+  /* Canopy — deep green surface for hero / dark panels */
+  --canopy: oklch(0.28 0.06 152);
+  --canopy-foreground: oklch(0.97 0.01 120);
+
+  --status-good: oklch(0.60 0.14 150);
+  --status-warn: oklch(0.74 0.15 75);
+  --status-critical: oklch(0.60 0.18 30);
+
+  /* Chart series: N green, P ochre, K teal, pH plum-slate, moisture blue-slate */
+  --chart-1: oklch(0.52 0.12 152);
+  --chart-2: oklch(0.66 0.10 62);
+  --chart-3: oklch(0.55 0.08 205);
+  --chart-4: oklch(0.50 0.06 300);
+  --chart-5: oklch(0.58 0.09 235);
+
+  --radius: 0.875rem;
+
+  --sidebar: oklch(0.985 0.004 100);
+  --sidebar-foreground: oklch(0.30 0.03 150);
+  --sidebar-primary: oklch(0.42 0.095 152);
+  --sidebar-primary-foreground: oklch(0.985 0.01 120);
+  --sidebar-accent: oklch(0.94 0.02 140);
+  --sidebar-accent-foreground: oklch(0.32 0.06 150);
+  --sidebar-border: oklch(0.91 0.01 120);
+  --sidebar-ring: oklch(0.55 0.10 152);
+}
+
+.dark {
+  color-scheme: dark;
+  --background: oklch(0.17 0.015 150);
+  --foreground: oklch(0.96 0.01 120);
+  --card: oklch(0.21 0.018 150);
+  --card-foreground: oklch(0.96 0.01 120);
+  --popover: oklch(0.21 0.018 150);
+  --popover-foreground: oklch(0.96 0.01 120);
+  --primary: oklch(0.72 0.13 150);
+  --primary-foreground: oklch(0.18 0.03 150);
+  --secondary: oklch(0.26 0.02 150);
+  --secondary-foreground: oklch(0.92 0.02 130);
+  --muted: oklch(0.26 0.02 150);
+  --muted-foreground: oklch(0.70 0.02 140);
+  --accent: oklch(0.28 0.03 150);
+  --accent-foreground: oklch(0.92 0.02 130);
+  --destructive: oklch(0.68 0.18 25);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.65 0.10 150);
+  --earth: oklch(0.72 0.11 65);
+  --earth-foreground: oklch(0.18 0.03 60);
+  --canopy: oklch(0.24 0.05 152);
+  --canopy-foreground: oklch(0.97 0.01 120);
+  --status-good: oklch(0.72 0.14 150);
+  --status-warn: oklch(0.80 0.14 78);
+  --status-critical: oklch(0.70 0.17 30);
+  --chart-1: oklch(0.70 0.13 150);
+  --chart-2: oklch(0.74 0.11 65);
+  --chart-3: oklch(0.68 0.09 205);
+  --chart-4: oklch(0.68 0.07 300);
+  --chart-5: oklch(0.70 0.09 235);
+  --sidebar: oklch(0.19 0.017 150);
+  --sidebar-foreground: oklch(0.92 0.01 120);
+  --sidebar-primary: oklch(0.72 0.13 150);
+  --sidebar-primary-foreground: oklch(0.18 0.03 150);
+  --sidebar-accent: oklch(0.27 0.03 150);
+  --sidebar-accent-foreground: oklch(0.95 0.01 120);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.65 0.10 150);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply bg-background;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  /* Subtle glass surface, used sparingly */
+  .glass {
+    background: color-mix(in oklab, var(--card) 72%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .soil-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--canopy-foreground) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--canopy-foreground) 6%, transparent) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+.pulse-ring::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: pulse-ring 1.8s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise-in {
+  animation: rise-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
